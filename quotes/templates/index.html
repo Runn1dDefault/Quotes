@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница с кнопками и логами</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            margin: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="buttons">
+        <a href="{{ BASE_URL }}/api/v1/quotes">Quotes</a>
+        <a href="{{ BASE_URL }}/api/v1/authors">Authors</a>
+        <a href="{{ BASE_URL }}/api/v1/tags">Tags</a>
+        <a href="{{ BASE_URL }}/api/v1/schema/">Schema</a>
+        <a href="{{ BASE_URL }}/api/v1/schema/swagger-ui/">Swagger</a>
+        <a href="{{ BASE_URL }}/api/v1/schema/redoc/">Redoc</a>
+    </div>
+</body>
+</html>
