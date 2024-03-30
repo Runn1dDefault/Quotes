@@ -4,5 +4,5 @@ from notifications.consumers import AsyncNotificationConsumer
 
 
 websocket_urlpatterns = [
-    path(r"notifications", AsyncNotificationConsumer.as_asgi()),
+    path("ws/notifications", AsyncNotificationConsumer.as_asgi()),
 ]
