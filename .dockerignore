@@ -1,0 +1,8 @@
+README.md
+.git
+.env
+
+__pycache__
+
+.env-example
+.idea/
