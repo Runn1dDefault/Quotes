@@ -17,19 +17,61 @@
             flex-direction: column;
         }
 
-        a {
+        .buttons a {
             margin: 15px;
         }
+
+        .log {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 50%;
+            height: 200px; /* Задайте высоту по необходимости */
+            overflow-y: auto; /* Добавление прокрутки при необходимости */
+        }
+
     </style>
 </head>
 <body>
-    <div class="buttons">
-        <a href="{{ BASE_URL }}/api/v1/quotes">Quotes</a>
-        <a href="{{ BASE_URL }}/api/v1/authors">Authors</a>
-        <a href="{{ BASE_URL }}/api/v1/tags">Tags</a>
-        <a href="{{ BASE_URL }}/api/v1/schema/">Schema</a>
-        <a href="{{ BASE_URL }}/api/v1/schema/swagger-ui/">Swagger</a>
-        <a href="{{ BASE_URL }}/api/v1/schema/redoc/">Redoc</a>
+    <div class="container">
+        <div class="buttons">
+            <a href="{{ BASE_URL }}/api/v1/quotes">Quotes</a>
+            <a href="{{ BASE_URL }}/api/v1/authors">Authors</a>
+            <a href="{{ BASE_URL }}/api/v1/tags">Tags</a>
+            <a href="{{ BASE_URL }}/api/v1/schema/">Schema</a>
+            <a href="{{ BASE_URL }}/api/v1/schema/swagger-ui/">Swagger</a>
+            <a href="{{ BASE_URL }}/api/v1/schema/redoc/">Redoc</a>
+        </div>
+
+        <div class="log" id="log">
+            <!-- Лог будет отображаться здесь -->
+        </div>
     </div>
+    <script type="text/javascript">
+        var socket = new WebSocket('ws://{{ HOST }}/notifications');
+
+        function addToLog(message) {
+            var logElement = document.getElementById('log');
+            logElement.innerHTML += message + '<br>';
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        socket.onmessage = function(event) {
+            let data = JSON.parse(event.data);
+            if (data?.type === "notification") {
+                let message = `<a href="{{ BASE_URL }}/api/v1/quotes/${data?.quote_id}">${data?.text}</a>`;
+                addToLog(message);
+            }
+        };
+
+        socket.onerror = function(error) {
+            console.error('Произошла ошибка веб-сокета:', error);
+            addToLog('Произошла ошибка веб-сокета, перезагрузите страницу!');
+        };
+
+        socket.onclose = function(event) {
+            console.log('Соединение закрыто:', event);
+            addToLog('Соединение веб-сокета закрыто');
+        };
+    </script>
 </body>
 </html>
