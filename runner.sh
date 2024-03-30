@@ -11,4 +11,4 @@ python manage.py migrate --no-input
 echo 'done migrations.'
 
 echo 'Running server...'
-daphne -p 8000 server.asgi:application
+daphne -b 0.0.0.0 -p 8001 server.asgi:application
