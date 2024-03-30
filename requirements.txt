@@ -1,9 +1,11 @@
+channels==4.0.0
+channels-redis==4.2.0
+daphne==4.1.0
+dj-config-url==0.1.1
 Django==5.0.3
 djangorestframework==3.15.1
 drf-spectacular==0.27.1
-python-dotenv~=1.0.1
-channels~=4.0.0
-channels-redis==4.2.0
-asgiref~=3.8.1
-dj-config-url~=0.1.1
-psycopg2-binary~=2.9.9
+psycopg2-binary==2.9.9
+python-dotenv==1.0.1
+redis==5.0.3
+Twisted[tls, http2]
