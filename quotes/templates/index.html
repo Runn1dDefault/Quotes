@@ -21,14 +21,17 @@
             margin: 15px;
         }
 
+        .log_wrapper {
+            width: 80%;
+        }
+
         .log {
             border: 1px solid #ccc;
             padding: 10px;
-            width: 50%;
-            height: 200px; /* Задайте высоту по необходимости */
+            width: 100%;
+            height: 200px;
             overflow-y: auto; /* Добавление прокрутки при необходимости */
         }
-
     </style>
 </head>
 <body>
@@ -41,9 +44,11 @@
             <a href="{{ BASE_URL }}/api/v1/schema/swagger-ui/">Swagger</a>
             <a href="{{ BASE_URL }}/api/v1/schema/redoc/">Redoc</a>
         </div>
-
-        <div class="log" id="log">
-            <!-- Лог будет отображаться здесь -->
+        <div class="log_wrapper">
+            <h3>Уведомления: </h3>
+            <div class="log" id="log">
+                <!-- Лог будет отображаться здесь -->
+            </div>
         </div>
     </div>
     <script type="text/javascript">
