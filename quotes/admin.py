@@ -24,7 +24,7 @@ class AuthorAdmin(admin.ModelAdmin):
 class QuoteAdmin(admin.ModelAdmin):
     autocomplete_fields = ("author", "tags")
     list_display = ("id", "author", "short_text")
-    search_fields = ("id", "author__full_name", "text")
+    search_fields = ("id", "text")
     list_filter = ("created_at",)
     readonly_fields = ("id", "created_at")
 
