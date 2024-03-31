@@ -83,9 +83,12 @@ ASGI_APPLICATION = "server.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+POSTGRES_SETTINGS = dj_database_url.config(default=os.getenv('POSTGRES_DB_CONNECTION_URL'))
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('POSTGRES_DB_CONNECTION_URL'))
+    'default': POSTGRES_SETTINGS | {
+        "TEST": {"NAME": "test_quotes"}
+    }
 }
 
 REDIS_CONNECTION_URL = os.getenv('REDIS_DB_CONNECTION_URL')
