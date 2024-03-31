@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.template.defaultfilters import truncatechars
 
-from .models import Tag, Author, Quote
+from quotes.models import Tag, Author, Quote
 
 
 @admin.register(Tag)
