@@ -45,7 +45,6 @@ class Author(BaseModel):
 
 
 class Quote(BaseModel):
-    _text_validator = MinWordCountValidator(3)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -58,9 +57,3 @@ class Quote(BaseModel):
             models.Index("id", "created_at", name="quote_created_idx"),
         )
         ordering = ("-created_at",)
-
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
-        self._text_validator(self.text)  # for TextField validators are not called
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
