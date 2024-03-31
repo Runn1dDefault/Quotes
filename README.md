@@ -1,11 +1,12 @@
 # Quotes API
+simple citation API with authors and tags.
 
 Running requires:
 * Python 3.11 (tested under Python 3.11.2)
 
 ---
 ### Setting up Before the beginning
-#### Create .env file in base directory and populate it like .env-example
+#### create a .env file in the base directory and fill it in according to the contents of the .env-example file
 > :warning: **Required!**
 ```text
     .
