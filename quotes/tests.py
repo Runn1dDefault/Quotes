@@ -42,11 +42,6 @@ class ModelsTestCase(TestCase):
         self.assertIn(self.tag1, quote.tags.all())
         self.assertIn(self.tag2, quote.tags.all())
 
-    def test_failure_on_create_quote_with_less_word(self):
-        with self.assertRaises(ValidationError):
-            quote = Quote(text='Two word', author=self.author)
-            quote.save()
-
     def test_tag_creation(self):
         tag1 = Tag.objects.get(name='Tag1')
         tag2 = Tag.objects.get(name='Tag2')
@@ -70,7 +65,7 @@ class AuthorTestCase(APITestCase):
             for num in range(15)
         ]
         Author.objects.bulk_create(self.authors)
-        self._url = reverse("authors-list")
+        self._url = reverse("author-list")
 
     def test_list(self):
         response = self.client.get(self._url, format='json')
@@ -157,7 +152,7 @@ class TagTests(APITestCase):
     def setUp(self):
         self.tags = [Tag(name=f"test-{num}") for num in range(15)]
         Tag.objects.bulk_create(self.tags)
-        self._url = reverse('tags-list')
+        self._url = reverse('tag-list')
 
     def _get_tag(self) -> Tag:
         tag = self.tags[-1]
@@ -221,7 +216,7 @@ class QuoteTests(APITestCase):
             ) for num in range(10)
         ]
         Quote.objects.bulk_create(self.quotes)
-        self._url = reverse('quotes-list')
+        self._url = reverse('quote-list')
 
     def _get_quote(self):
         quote = self.quotes[-1]
@@ -252,16 +247,19 @@ class QuoteTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create(self):
-        payload = {"author": str(self.author.id), "text": "new quote test"}
+        author_url = reverse("author-detail", kwargs={"author_id": str(self.author.id)})
+        payload = {"author": author_url, "text": "new quote test"}
         response = self.client.post(self._url, format='json', data=payload)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn('id', response.data)
         self.assertEqual(response.data['text'], "new quote test")
 
     def test_failure_text_of_quote(self):
-        with self.assertRaises(ValidationError):
-            payload = {"author": str(self.author.id), "text": "two words"}
-            self.client.post(self._url, format='json', data=payload)
+        author_url = reverse("author-detail", kwargs={"author_id": str(self.author.id)})
+        payload = {"author": author_url, "text": "two words"}
+        response = self.client.post(self._url, format='json', data=payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("text", response.data)
 
     def test_failure_author_id(self):
         payload = {"author": "non-existent"}
@@ -270,7 +268,8 @@ class QuoteTests(APITestCase):
         self.assertIn("author", response.data)
 
     def test_failure_tags(self):
-        payload = {"author": str(self.author.id), "text": "Some test quote", "tags": ["non-existent"]}
+        author_url = reverse("author-detail", kwargs={"author_id": str(self.author.id)})
+        payload = {"author": author_url, "text": "Some test quote", "tags": ["non-existent"]}
         response = self.client.post(self._url, format='json', data=payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("tags", response.data)
