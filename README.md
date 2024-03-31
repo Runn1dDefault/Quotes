@@ -29,6 +29,10 @@ python manage.py makemigrations
 ```bash
 python manage.py migrate
 ```
+###### Running tests
+```bash
+python manage.py test quotes
+```
 ###### Server running
 ```bash
 python manage.py runserver
