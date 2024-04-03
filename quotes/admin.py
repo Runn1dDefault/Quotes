@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.template.defaultfilters import truncatechars
 
-from quotes.models import Tag, Author, Quote
+from quotes.models import Tag, Author, Quote, QuoteStat
 
 
 @admin.register(Tag)
@@ -20,8 +20,14 @@ class AuthorAdmin(admin.ModelAdmin):
     readonly_fields = ("id",)
 
 
+class QuoteStatInline(admin.StackedInline):
+    model = QuoteStat
+    extra = 0
+
+
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
+    inlines = [QuoteStatInline]
     autocomplete_fields = ("author", "tags")
     list_display = ("id", "author", "short_text")
     search_fields = ("id", "text")
