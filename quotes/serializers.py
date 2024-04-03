@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from quotes.models import Quote, Author, Tag
+from quotes.models import Quote, Author, Tag, QuoteStat
 from quotes.validators import MinWordCountValidator
 
 
@@ -22,6 +22,12 @@ class TagSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
+class QuoteStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuoteStat
+        exclude = ("quote",)
+
+
 class QuoteSerializer(serializers.ModelSerializer):
     text = serializers.CharField(validators=[MinWordCountValidator(3)])
     tag_listing = serializers.SerializerMethodField(read_only=True)
@@ -38,10 +44,11 @@ class QuoteSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
+    stat = QuoteStatSerializer(many=False, read_only=True)
 
     class Meta:
         model = Quote
-        fields = ("id", "text", "created_at", "tags", "author", "tag_listing")
+        fields = ("id", "text", "created_at", "tags", "author", "tag_listing", "stat")
         read_only_fields = ("id", "created_at")
 
     def get_tag_listing(self, obj):

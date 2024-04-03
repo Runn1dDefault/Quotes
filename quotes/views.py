@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, filters, decorators, response
 
 from quotes.filters import ListFilter
-from quotes.models import Quote, Tag, Author
+from quotes.models import Quote, Tag, Author, QuoteStat
 from quotes.serializers import QuoteSerializer, TagSerializer, AuthorSerializer
 
 
@@ -39,6 +39,18 @@ class QuoteModelViewSet(viewsets.ModelViewSet):
         quote = self.get_object()
         tag_serializer = TagSerializer(instance=quote.tags.all(), context=self.get_serializer_context(), many=True)
         return response.Response(tag_serializer.data)
+
+    @staticmethod
+    def _update_quote_stat_views(quote_id) -> None:
+        stat, _ = QuoteStat.objects.get_or_create(quote_id=quote_id)
+        stat.views += 1
+        stat.save()
+
+    def retrieve(self, request, *args, **kwargs):
+        quote = self.get_object()
+        self._update_quote_stat_views(quote.id)
+        serializer = self.get_serializer(quote)
+        return response.Response(serializer.data)
 
 
 def index(request):

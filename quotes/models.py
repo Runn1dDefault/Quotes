@@ -57,3 +57,8 @@ class Quote(BaseModel):
             models.Index("id", "created_at", name="quote_created_idx"),
         )
         ordering = ("-created_at",)
+
+
+class QuoteStat(BaseModel):
+    quote = models.OneToOneField(Quote, on_delete=models.CASCADE, related_name='stat')
+    views = models.PositiveIntegerField(default=0)
