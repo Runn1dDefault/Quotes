@@ -45,6 +45,7 @@ services:
       - postgres
     volumes:
       - static:/app/static
+      - ./quotes/migrations:/app/quotes/migrations
 
   nginx:
     image: nginx:alpine
