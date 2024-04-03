@@ -44,12 +44,16 @@ class QuoteSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
-    stat = QuoteStatSerializer(many=False, read_only=True)
+    stat = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Quote
         fields = ("id", "text", "created_at", "tags", "author", "tag_listing", "stat")
         read_only_fields = ("id", "created_at")
+
+    def get_stat(self, obj):
+        stat, _ = QuoteStat.objects.get_or_create(quote=obj)
+        return QuoteStatSerializer(instance=stat, context=self.context).data
 
     def get_tag_listing(self, obj):
         return self.context['request'].build_absolute_uri(reverse('quote-tags', kwargs={'quote_id': obj.id}))
